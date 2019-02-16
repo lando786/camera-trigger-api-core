@@ -1,4 +1,5 @@
 ﻿using camera_trigger_api_core.Contexts;
+using camera_trigger_api_core.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -20,8 +21,9 @@ namespace camera_trigger_api_core
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<TriggerContext>(opt =>
-            opt.UseInMemoryDatabase("TriggerList"));
+            //services.AddDbContext<TriggerContext>(opt =>
+            //opt.UseInMemoryDatabase("TriggerList"));
+            services.AddScoped<TriggerService>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 

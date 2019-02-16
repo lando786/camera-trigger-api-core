@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using camera_trigger_api_core.Contexts;
 using camera_trigger_api_core.Models;
+using camera_trigger_api_core.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,21 +12,21 @@ namespace camera_trigger_api_core.Controllers
     [ApiController]
     public class TriggersController : ControllerBase
     {
-        private TriggerContext _ctx;
-        public TriggersController(TriggerContext ctx)
+        private TriggerService _ctx;
+        public TriggersController(TriggerService ctx)
         {
             _ctx = ctx;
         }
         // GET api/values
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Trigger>>> GetAsync() => 
-            await _ctx.Triggers.ToListAsync();
+            await _ctx.GetAsync();
 
         // GET api/values/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Trigger>> GetAsync(long id)
+        public async Task<ActionResult<Trigger>> GetAsync(string id)
         {
-            var item = await _ctx.Triggers.FindAsync(id);
+            var item = await _ctx.GetAsync(id);
             if (item == null)
             {
                 return NotFound();
@@ -39,9 +39,7 @@ namespace camera_trigger_api_core.Controllers
         public async Task<ActionResult<Trigger>> PostTriggerItem(Trigger item)
         {
             item.TimeStamp = DateTime.Now;
-            _ctx.Triggers.Add(item);
-            await _ctx.SaveChangesAsync();
-
+            var created = _ctx.CreateAsync(item);
             return CreatedAtAction(nameof(GetAsync), new { id = item.Id }, item);
         }
     }
