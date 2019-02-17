@@ -1,6 +1,5 @@
-﻿using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
-using System;
+﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace camera_trigger_api_core.Models
 {
@@ -10,12 +9,9 @@ namespace camera_trigger_api_core.Models
         {
 
         }
-        [BsonId]
-        [BsonRepresentation(BsonType.ObjectId)]
-        public string Id { get; set; }
-        [BsonElement("CameraName")]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public long Id { get; set; }
         public string CameraName { get; set; }
-        [BsonElement("TimeStamp")]
         public DateTime TimeStamp { get; set; }
     }
 }

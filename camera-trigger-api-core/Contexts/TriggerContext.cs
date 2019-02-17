@@ -10,5 +10,6 @@ namespace camera_trigger_api_core.Contexts
         {
         }
         public DbSet<Trigger> Triggers { get; set; }
+
     }
 }

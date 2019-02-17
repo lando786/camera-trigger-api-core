@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
+    <UserSecretsId>82f174f1-765a-4e42-a9be-afddeec5687a</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -11,7 +12,6 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.1.2" PrivateAssets="All" />
-    <PackageReference Include="MongoDB.Driver" Version="2.7.3" />
   </ItemGroup>
 
 </Project>
