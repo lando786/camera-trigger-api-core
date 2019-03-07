@@ -34,17 +34,7 @@ namespace camera_trigger_api_core.Controllers
             }
             return item;
         }
-
-        // POST api/triggers
-        //[HttpPost]
-        //public async Task<ActionResult<Trigger>> PostTriggerItemAsync(Trigger item)
-        //{
-        //    item.TimeStamp = DateTime.Now;
-        //    var created = _ctx.Triggers.AddAsync(item);
-        //    await _ctx.SaveChangesAsync();
-        //    return CreatedAtAction(nameof(GetAsync), new { id = item.Id }, item);
-        //}
-
+        
         [HttpPost]
         public async Task<ActionResult<Trigger>> PostTriggerItemText()
         {
