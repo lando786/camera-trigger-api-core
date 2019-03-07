@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using camera_trigger_api_core.Contexts;
 using camera_trigger_api_core.Models;
@@ -17,12 +18,12 @@ namespace camera_trigger_api_core.Controllers
         {
             _ctx = ctx;
         }
-        // GET api/values
+        // GET api/triggers
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Trigger>>> GetAsync() => 
+        public async Task<ActionResult<IEnumerable<Trigger>>> GetAsync() =>
             await _ctx.Triggers.ToListAsync();
 
-        // GET api/values/5
+        // GET api/triggers/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Trigger>> GetAsync(long id)
         {
@@ -34,14 +35,31 @@ namespace camera_trigger_api_core.Controllers
             return item;
         }
 
-        // POST api/values
+        // POST api/triggers
+        //[HttpPost]
+        //public async Task<ActionResult<Trigger>> PostTriggerItemAsync(Trigger item)
+        //{
+        //    item.TimeStamp = DateTime.Now;
+        //    var created = _ctx.Triggers.AddAsync(item);
+        //    await _ctx.SaveChangesAsync();
+        //    return CreatedAtAction(nameof(GetAsync), new { id = item.Id }, item);
+        //}
+
         [HttpPost]
-        public async Task<ActionResult<Trigger>> PostTriggerItemAsync(Trigger item)
+        public async Task<ActionResult<Trigger>> PostTriggerItemText()
         {
-            item.TimeStamp = DateTime.Now;
-            var created = _ctx.Triggers.AddAsync(item);
-            await _ctx.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetAsync), new { id = item.Id }, item);
+            using (var reader = new StreamReader(Request.Body))
+            {
+                string plainText = reader.ReadToEnd();
+
+                var item = new Trigger(plainText);
+                await _ctx.Triggers.AddAsync(item);
+                await _ctx.SaveChangesAsync();
+                return CreatedAtAction(nameof(GetAsync), new { id = item.Id }, item);
+
+                return Ok(plainText);
+            }
+            
         }
     }
 }

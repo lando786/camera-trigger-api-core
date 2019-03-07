@@ -21,9 +21,12 @@ namespace camera_trigger_api_core
         public void ConfigureServices(IServiceCollection services)
         {
             var connection = Configuration.GetConnectionString("TriggerDb");
+
             services.AddDbContext<TriggerContext>(opt =>
             opt.UseSqlServer(connection));
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc()
+                
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -41,5 +44,6 @@ namespace camera_trigger_api_core
             app.UseHttpsRedirection();
             app.UseMvc();
         }
+        
     }
 }

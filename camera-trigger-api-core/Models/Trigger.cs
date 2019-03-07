@@ -9,6 +9,11 @@ namespace camera_trigger_api_core.Models
         {
 
         }
+        public Trigger(string cameraName)
+        {
+            CameraName = cameraName;
+            TimeStamp = DateTime.Now;
+        }
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long Id { get; set; }
         public string CameraName { get; set; }
