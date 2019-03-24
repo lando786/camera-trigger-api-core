@@ -24,6 +24,7 @@ namespace camera_trigger_api_core
 
             services.AddDbContext<TriggerContext>(opt =>
             opt.UseSqlServer(connection));
+            services.AddCors();
             services.AddMvc()
                 
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
