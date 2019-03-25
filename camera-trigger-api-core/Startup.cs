@@ -42,6 +42,7 @@ namespace camera_trigger_api_core
                 app.UseHsts();
             }
 
+            app.UseCors();
             app.UseHttpsRedirection();
             app.UseMvc();
         }

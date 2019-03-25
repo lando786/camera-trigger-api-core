@@ -20,8 +20,10 @@ namespace camera_trigger_api_core.Controllers
         }
         // GET api/triggers
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Trigger>>> GetAsync() =>
-            await _ctx.Triggers.ToListAsync();
+        public async Task<ActionResult<IEnumerable<Trigger>>> GetAsync() {
+            Request.HttpContext.Response.Headers.Add("Access-Control-Allow-Origin", "*");
+            return await _ctx.Triggers.ToListAsync();
+        }
 
         // GET api/triggers/5
         [HttpGet("{id}")]
