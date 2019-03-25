@@ -20,10 +20,17 @@ namespace camera_trigger_api_core.Controllers
         }
         // GET api/triggers
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Trigger>>> GetAsync()
+        public async Task<ActionResult<IEnumerable<DailyReport>>> GetAsync()
         {
             Request.HttpContext.Response.Headers.Add("Access-Control-Allow-Origin", "*");
-            return await _ctx.Triggers.ToListAsync();
+            var triggers = await _ctx.Triggers.ToListAsync();
+            return triggers.ToLookup(x => x.TimeStamp.Date).Select(r =>
+                new DailyReport
+                {
+                    Date = r.Key.ToString(),
+                    Count = r.Count()
+                }
+                ).ToList();
         }
     }
 }
