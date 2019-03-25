@@ -27,7 +27,7 @@ namespace camera_trigger_api_core.Controllers
             return triggers.ToLookup(x => x.TimeStamp.Date).Select(r =>
                 new DailyReport
                 {
-                    Date = r.Key.ToString(),
+                    Date = r.Key.ToString().Substring(0, r.Key.ToString().IndexOf(' ')),
                     Count = r.Count()
                 }
                 ).ToList();
