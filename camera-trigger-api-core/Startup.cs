@@ -20,6 +20,7 @@ namespace camera_trigger_api_core
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            
             var connection = Configuration["ConnectionString"];
             
             services.AddDbContext<TriggerContext>(opt =>
@@ -38,7 +39,9 @@ namespace camera_trigger_api_core
         .AddJsonFile("appsettings.json",
                      optional: false,
                      reloadOnChange: true)
-        .AddEnvironmentVariables();
+                     .AddEnvironmentVariables()
+        .AddEnvironmentVariables("APPSETTING_");
+            
             if (env.IsDevelopment())
             {
                 builder.AddUserSecrets<Startup>();
