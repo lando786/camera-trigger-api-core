@@ -20,8 +20,8 @@ namespace camera_trigger_api_core
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var connection = Configuration.GetConnectionString("TriggerDb");
-
+            var connection = Configuration["ConnectionString"];
+            
             services.AddDbContext<TriggerContext>(opt =>
             opt.UseSqlServer(connection));
             services.AddCors();
@@ -33,8 +33,15 @@ namespace camera_trigger_api_core
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            var builder = new ConfigurationBuilder()
+        .SetBasePath(env.ContentRootPath)
+        .AddJsonFile("appsettings.json",
+                     optional: false,
+                     reloadOnChange: true)
+        .AddEnvironmentVariables();
             if (env.IsDevelopment())
             {
+                builder.AddUserSecrets<Startup>();
                 app.UseDeveloperExceptionPage();
             }
             else
