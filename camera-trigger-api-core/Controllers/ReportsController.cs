@@ -20,12 +20,26 @@ namespace camera_trigger_api_core.Controllers
         }
         // GET api/triggers
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<DailyReport>>> GetAsync()
+        public async Task<ActionResult<IEnumerable<Report>>> GetAsync()
         {
             Request.HttpContext.Response.Headers.Add("Access-Control-Allow-Origin", "*");
             var triggers = await _ctx.Triggers.ToListAsync();
             return triggers.ToLookup(x => x.TimeStamp.Date).Select(r =>
-                new DailyReport
+                new Report
+                {
+                    Date = r.Key.ToString().Substring(0, r.Key.ToString().IndexOf(' ')),
+                    Count = r.Count()
+                }
+                ).ToList();
+        }
+        [HttpGet]
+        [Route("week")]
+        public async Task<ActionResult<IEnumerable<Report>>> GetWeek()
+        {
+            Request.HttpContext.Response.Headers.Add("Access-Control-Allow-Origin", "*");
+            var triggers = await _ctx.Triggers.ToListAsync();
+            return triggers.Where(x => x.TimeStamp >= DateTime.Today.AddDays(-6)).ToLookup(x => x.TimeStamp.Date).Select(r =>
+                new Report
                 {
                     Date = r.Key.ToString().Substring(0, r.Key.ToString().IndexOf(' ')),
                     Count = r.Count()
