@@ -11,11 +11,11 @@ namespace camera_trigger_api_core.Controllers
     [ApiController]
     public class TriggersController : ControllerBase
     {
-        private ITriggerService _ctx;
+        private ITriggerService _service;
 
-        public TriggersController(ITriggerService ctx)
+        public TriggersController(ITriggerService service)
         {
-            _ctx = ctx;
+            _service = service;
         }
 
         // GET api/triggers
@@ -23,14 +23,14 @@ namespace camera_trigger_api_core.Controllers
         public async Task<ActionResult<IEnumerable<TriggerDto>>> GetAsync()
         {
             Request.HttpContext.Response.Headers.Add("Access-Control-Allow-Origin", "*");
-            return await _ctx.GetAllTriggersAsync();
+            return await _service.GetAllTriggersAsync();
         }
 
         // GET api/triggers/5
         [HttpGet("{id}")]
         public async Task<ActionResult<TriggerDto>> GetAsync(long id)
         {
-            var res = await _ctx.FindByIdAsync(id);
+            var res = await _service.FindByIdAsync(id);
             return res ?? NotFound();
         }
 
@@ -42,7 +42,7 @@ namespace camera_trigger_api_core.Controllers
                 string plainText = reader.ReadToEnd();
 
                 var item = new TriggerDto(plainText);
-                var res = await _ctx.AddTriggerAsync(item);
+                var res = await _service.AddTriggerAsync(item);
                 return CreatedAtAction(nameof(GetAsync).ToLower(), new { id = res }, item);
             }
         }

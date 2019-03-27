@@ -35,6 +35,7 @@ namespace camera_trigger_api_core
         {
             services.AddTransient(typeof(ITriggerContext), typeof(TriggerContext));
             services.AddTransient(typeof(ITriggerService), typeof(TriggerService));
+            services.AddTransient(typeof(IReportsService), typeof(ReportsService));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

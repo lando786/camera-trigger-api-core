@@ -1,10 +1,7 @@
-﻿using camera_trigger_api_core.Contexts;
-using camera_trigger_api_core.Models;
+﻿using camera_trigger_api_core.Models;
+using camera_trigger_api_core.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace camera_trigger_api_core.Controllers
@@ -13,11 +10,11 @@ namespace camera_trigger_api_core.Controllers
     [ApiController]
     public class ReportsController : ControllerBase
     {
-        private ITriggerContext _ctx;
+        private IReportsService _service;
 
-        public ReportsController(ITriggerContext ctx)
+        public ReportsController(IReportsService service)
         {
-            _ctx = ctx;
+            _service = service;
         }
 
         // GET api/triggers
@@ -25,14 +22,7 @@ namespace camera_trigger_api_core.Controllers
         public async Task<ActionResult<IEnumerable<ReportDto>>> GetAsync()
         {
             Request.HttpContext.Response.Headers.Add("Access-Control-Allow-Origin", "*");
-            var triggers = await _ctx.Triggers.ToListAsync();
-            return triggers.ToLookup(x => x.TimeStamp.Date).Select(r =>
-                new ReportDto
-                {
-                    Date = r.Key.ToString().Substring(0, r.Key.ToString().IndexOf(' ')),
-                    Count = r.Count()
-                }
-                ).ToList();
+            return await _service.GetFullReport();
         }
 
         [HttpGet]
@@ -40,14 +30,7 @@ namespace camera_trigger_api_core.Controllers
         public async Task<ActionResult<IEnumerable<ReportDto>>> GetWeek()
         {
             Request.HttpContext.Response.Headers.Add("Access-Control-Allow-Origin", "*");
-            var triggers = await _ctx.Triggers.ToListAsync();
-            return triggers.Where(x => x.TimeStamp >= DateTime.Today.AddDays(-6)).ToLookup(x => x.TimeStamp.Date).Select(r =>
-                new ReportDto
-                {
-                    Date = r.Key.ToString().Substring(0, r.Key.ToString().IndexOf(' ')),
-                    Count = r.Count()
-                }
-                ).ToList();
+            return await _service.GetWeeklyReport();
         }
     }
 }
