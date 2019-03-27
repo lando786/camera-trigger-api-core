@@ -13,9 +13,9 @@ namespace camera_trigger_api_core.Controllers
     [ApiController]
     public class ReportsController : ControllerBase
     {
-        private TriggerContext _ctx;
+        private ITriggerContext _ctx;
 
-        public ReportsController(TriggerContext ctx)
+        public ReportsController(ITriggerContext ctx)
         {
             _ctx = ctx;
         }
