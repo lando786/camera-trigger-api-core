@@ -15,9 +15,9 @@ namespace camera_trigger_api_core.Controllers
     [ApiController]
     public class TriggersController : ControllerBase
     {
-        private TriggerContext _ctx;
+        private ITriggerContext _ctx;
 
-        public TriggersController(TriggerContext ctx)
+        public TriggersController(ITriggerContext ctx)
         {
             _ctx = ctx;
         }

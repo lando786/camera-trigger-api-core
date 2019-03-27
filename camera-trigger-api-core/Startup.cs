@@ -21,7 +21,7 @@ namespace camera_trigger_api_core
         public void ConfigureServices(IServiceCollection services)
         {
             var connection = Configuration["ConnectionString"];
-
+            services.AddTransient(typeof(ITriggerContext), typeof(TriggerContext));
             services.AddDbContext<TriggerContext>(opt =>
             opt.UseSqlServer(connection));
             services.AddCors();
