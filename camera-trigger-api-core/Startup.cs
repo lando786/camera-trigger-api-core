@@ -20,14 +20,13 @@ namespace camera_trigger_api_core
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            
             var connection = Configuration["ConnectionString"];
-            
+
             services.AddDbContext<TriggerContext>(opt =>
             opt.UseSqlServer(connection));
             services.AddCors();
             services.AddMvc()
-                
+
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
@@ -41,7 +40,7 @@ namespace camera_trigger_api_core
                      reloadOnChange: true)
                      .AddEnvironmentVariables()
         .AddEnvironmentVariables("APPSETTING_");
-            
+
             if (env.IsDevelopment())
             {
                 builder.AddUserSecrets<Startup>();
@@ -56,6 +55,5 @@ namespace camera_trigger_api_core
             app.UseHttpsRedirection();
             app.UseMvc();
         }
-        
     }
 }

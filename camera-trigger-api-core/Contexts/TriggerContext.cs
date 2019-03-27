@@ -9,7 +9,7 @@ namespace camera_trigger_api_core.Contexts
             : base(options)
         {
         }
-        public DbSet<Trigger> Triggers { get; set; }
 
+        public DbSet<Trigger> Triggers { get; set; }
     }
 }
