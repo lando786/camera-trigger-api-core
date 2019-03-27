@@ -50,4 +50,3 @@ namespace camera_trigger_api_core.Services
         }
     }
 }
-}
