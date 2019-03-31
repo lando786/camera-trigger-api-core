@@ -23,7 +23,8 @@ namespace camera_trigger_api_core.Controllers
         public async Task<ActionResult<IEnumerable<TriggerDto>>> GetAsync()
         {
             Request.HttpContext.Response.Headers.Add("Access-Control-Allow-Origin", "*");
-            return await _service.GetAllTriggersAsync();
+            var triggers = await _service.GetAllTriggersAsync();
+            return Ok(triggers);
         }
 
         // GET api/triggers/5
@@ -31,7 +32,11 @@ namespace camera_trigger_api_core.Controllers
         public async Task<ActionResult<TriggerDto>> GetAsync(long id)
         {
             var res = await _service.FindByIdAsync(id);
-            return res ?? NotFound();
+            if (res != null)
+            {
+                return Ok(res);
+            }
+            return NotFound();
         }
 
         [HttpPost]

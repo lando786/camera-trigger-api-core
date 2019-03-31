@@ -12,9 +12,9 @@ namespace camera_trigger_api_core.Services
 {
     public interface ITriggerService
     {
-        Task<ActionResult<IEnumerable<TriggerDto>>> GetAllTriggersAsync();
+        Task<IEnumerable<TriggerDto>> GetAllTriggersAsync();
 
-        Task<ActionResult<TriggerDto>> FindByIdAsync(long id);
+        Task<TriggerDto> FindByIdAsync(long id);
 
         Task<long> AddTriggerAsync(TriggerDto item);
     }
@@ -40,7 +40,7 @@ namespace camera_trigger_api_core.Services
             return saveResult > 0 ? toAdd.Id : -1;
         }
 
-        public async Task<ActionResult<TriggerDto>> FindByIdAsync(long id)
+        public async Task<TriggerDto> FindByIdAsync(long id)
         {
             var item = await _ctx.Triggers.FindAsync(id);
             if (item == null)
@@ -50,7 +50,7 @@ namespace camera_trigger_api_core.Services
             return item.ConvertToDto();
         }
 
-        public async Task<ActionResult<IEnumerable<TriggerDto>>> GetAllTriggersAsync()
+        public async Task<IEnumerable<TriggerDto>> GetAllTriggersAsync()
         {
             var list = await _ctx.Triggers.ToListAsync();
             return list.Select(x => x.ConvertToDto()).ToList();
