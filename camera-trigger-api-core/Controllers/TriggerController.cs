@@ -1,12 +1,8 @@
-﻿using camera_trigger_api_core.Contexts;
-using camera_trigger_api_core.DTOs;
-using camera_trigger_api_core.Helpers;
-using camera_trigger_api_core.Models;
+﻿using camera_trigger_api_core.DTOs;
+using camera_trigger_api_core.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace camera_trigger_api_core.Controllers
@@ -15,11 +11,11 @@ namespace camera_trigger_api_core.Controllers
     [ApiController]
     public class TriggersController : ControllerBase
     {
-        private TriggerContext _ctx;
+        private ITriggerService _service;
 
-        public TriggersController(TriggerContext ctx)
+        public TriggersController(ITriggerService service)
         {
-            _ctx = ctx;
+            _service = service;
         }
 
         // GET api/triggers
@@ -27,20 +23,20 @@ namespace camera_trigger_api_core.Controllers
         public async Task<ActionResult<IEnumerable<TriggerDto>>> GetAsync()
         {
             Request.HttpContext.Response.Headers.Add("Access-Control-Allow-Origin", "*");
-            var list = await _ctx.Triggers.ToListAsync();
-            return list.Select(x => x.ConvertToDto()).ToList();
+            var triggers = await _service.GetAllTriggersAsync();
+            return Ok(triggers);
         }
 
         // GET api/triggers/5
         [HttpGet("{id}")]
         public async Task<ActionResult<TriggerDto>> GetAsync(long id)
         {
-            var item = await _ctx.Triggers.FindAsync(id);
-            if (item == null)
+            var res = await _service.FindByIdAsync(id);
+            if (res != null)
             {
-                return NotFound();
+                return Ok(res);
             }
-            return item.ConvertToDto();
+            return NotFound();
         }
 
         [HttpPost]
@@ -50,10 +46,9 @@ namespace camera_trigger_api_core.Controllers
             {
                 string plainText = reader.ReadToEnd();
 
-                var item = new Trigger(plainText);
-                await _ctx.Triggers.AddAsync(item);
-                await _ctx.SaveChangesAsync();
-                return CreatedAtAction(nameof(GetAsync), new { id = item.Id }, item);
+                var item = new TriggerDto(plainText);
+                var res = await _service.AddTriggerAsync(item);
+                return CreatedAtAction(nameof(GetAsync).ToLower(), new { id = res }, item);
             }
         }
     }

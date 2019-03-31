@@ -1,4 +1,5 @@
 ﻿using camera_trigger_api_core.Contexts;
+using camera_trigger_api_core.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -21,13 +22,20 @@ namespace camera_trigger_api_core
         public void ConfigureServices(IServiceCollection services)
         {
             var connection = Configuration["ConnectionString"];
-
+            SetupDI(services);
             services.AddDbContext<TriggerContext>(opt =>
             opt.UseSqlServer(connection));
             services.AddCors();
             services.AddMvc()
 
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+        }
+
+        private static void SetupDI(IServiceCollection services)
+        {
+            services.AddTransient(typeof(ITriggerContext), typeof(TriggerContext));
+            services.AddTransient(typeof(ITriggerService), typeof(TriggerService));
+            services.AddTransient(typeof(IReportsService), typeof(ReportsService));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
