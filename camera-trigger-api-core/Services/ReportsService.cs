@@ -11,9 +11,9 @@ namespace camera_trigger_api_core.Services
 {
     public interface IReportsService
     {
-        Task<ActionResult<IEnumerable<ReportDto>>> GetFullReport();
+        Task<IEnumerable<ReportDto>> GetFullReport();
 
-        Task<ActionResult<IEnumerable<ReportDto>>> GetWeeklyReport();
+        Task<IEnumerable<ReportDto>> GetWeeklyReport();
     }
 
     public class ReportsService : IReportsService
@@ -25,7 +25,7 @@ namespace camera_trigger_api_core.Services
             _ctx = ctx;
         }
 
-        public async Task<ActionResult<IEnumerable<ReportDto>>> GetFullReport()
+        public async Task<IEnumerable<ReportDto>> GetFullReport()
         {
             var triggers = await _ctx.Triggers.ToListAsync();
             return triggers.ToLookup(x => x.TimeStamp.Date).Select(r =>
@@ -37,7 +37,7 @@ namespace camera_trigger_api_core.Services
                 ).ToList();
         }
 
-        public async Task<ActionResult<IEnumerable<ReportDto>>> GetWeeklyReport()
+        public async Task<IEnumerable<ReportDto>> GetWeeklyReport()
         {
             var triggers = await _ctx.Triggers.ToListAsync();
             return triggers.Where(x => x.TimeStamp >= DateTime.Today.AddDays(-6)).ToLookup(x => x.TimeStamp.Date).Select(r =>

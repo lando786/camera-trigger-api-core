@@ -22,7 +22,8 @@ namespace camera_trigger_api_core.Controllers
         public async Task<ActionResult<IEnumerable<ReportDto>>> GetAsync()
         {
             Request.HttpContext.Response.Headers.Add("Access-Control-Allow-Origin", "*");
-            return await _service.GetFullReport();
+            var rep = await _service.GetFullReport();
+            return Ok(rep);
         }
 
         [HttpGet]
@@ -30,7 +31,8 @@ namespace camera_trigger_api_core.Controllers
         public async Task<ActionResult<IEnumerable<ReportDto>>> GetWeek()
         {
             Request.HttpContext.Response.Headers.Add("Access-Control-Allow-Origin", "*");
-            return await _service.GetWeeklyReport();
+            var rep = await _service.GetWeeklyReport();
+            return Ok(rep);
         }
     }
 }
