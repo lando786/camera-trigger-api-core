@@ -2,7 +2,6 @@
 using camera_trigger_api_core.DTOs;
 using camera_trigger_api_core.Helpers;
 using camera_trigger_api_core.Models;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,7 +41,7 @@ namespace camera_trigger_api_core.Services
 
         public async Task<TriggerDto> FindByIdAsync(long id)
         {
-            var item = await _ctx.Triggers.FindAsync(id);
+            var item = await _ctx.Triggers.Where(x => x.Id == id).SingleOrDefaultAsync();
             if (item == null)
             {
                 return null;
