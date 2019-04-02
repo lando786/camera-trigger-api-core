@@ -1,6 +1,5 @@
 ﻿using camera_trigger_api_core.Contexts;
 using camera_trigger_api_core.Models;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
