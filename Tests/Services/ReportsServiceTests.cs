@@ -44,7 +44,13 @@ namespace Tests.Services
                 {
                     Id = 4,
                     CameraName = "Cam1",
-                    TimeStamp = DateTime.Now.AddDays(-20)
+                    TimeStamp = DateTime.Now.AddDays(-30)
+                },
+                new Trigger()
+                {
+                    Id = 5,
+                    CameraName = "Cam1",
+                    TimeStamp = DateTime.Now.AddDays(-40)
                 }
             };
 
