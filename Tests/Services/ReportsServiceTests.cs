@@ -80,5 +80,57 @@ namespace Tests.Services
                 res.Count().Should().Be(2);
             }
         }
+
+        [TestClass]
+        public class WhenDbThrowsException : ReportsServiceTests
+        {
+            [TestInitialize]
+            public void SetupFailingDb()
+            {
+                ctx.Setup(x => x.Triggers).Throws(new Exception());
+            }
+
+            [TestMethod]
+            public async Task FullReportShouldReturnNull()
+            {
+                var res = await service.GetFullReport();
+                res.Should().BeNull();
+            }
+
+            [TestMethod]
+            public async Task WeeklyReportCallShouldReturnNull()
+            {
+                var res = await service.GetWeeklyReport();
+                res.Should().BeNull();
+            }
+        }
+
+        [TestClass]
+        public class WhenDbIsEmpty : ReportsServiceTests
+        {
+            [TestInitialize]
+            public void EmptyDb()
+            {
+                var triggers = new List<Trigger>()
+                    .AsQueryable()
+                    .BuildMockDbSet()
+                    .Object;
+                ctx.Setup(x => x.Triggers).Returns(triggers);
+            }
+
+            [TestMethod]
+            public async Task WeekylyReportReturnsEmptyListAsync()
+            {
+                var res = await service.GetWeeklyReport();
+                res.Count().Should().Be(0);
+            }
+
+            [TestMethod]
+            public async Task FullReportReturnsEmptyListAsync()
+            {
+                var res = await service.GetFullReport();
+                res.Count().Should().Be(0);
+            }
+        }
     }
 }
