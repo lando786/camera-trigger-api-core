@@ -26,30 +26,44 @@ namespace camera_trigger_api_core.Services
 
         public async Task<IEnumerable<ReportDto>> GetFullReport()
         {
-            var triggers = await _ctx.Triggers
-                .Where(x => x.TimeStamp >= DateTime.Today.AddDays(-30))
-                .ToListAsync();
-            return triggers.ToLookup(x => x.TimeStamp.Date).Select(r =>
-                new ReportDto
-                {
-                    Date = r.Key.ToString().Substring(0, r.Key.ToString().IndexOf(' ')),
-                    Count = r.Count()
-                }
-                ).ToList();
+            try
+            {
+                var triggers = await _ctx.Triggers
+                    .Where(x => x.TimeStamp >= DateTime.Today.AddDays(-30))
+                    .ToListAsync();
+                return triggers.ToLookup(x => x.TimeStamp.Date).Select(r =>
+                    new ReportDto
+                    {
+                        Date = r.Key.ToString().Substring(0, r.Key.ToString().IndexOf(' ')),
+                        Count = r.Count()
+                    }
+                    ).ToList();
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         public async Task<IEnumerable<ReportDto>> GetWeeklyReport()
         {
-            var triggers = await _ctx.Triggers
-                .Where(x => x.TimeStamp >= DateTime.Today.AddDays(-6))
-                .ToListAsync();
-            return triggers.ToLookup(x => x.TimeStamp.Date).Select(r =>
-                new ReportDto
-                {
-                    Date = r.Key.ToString().Substring(0, r.Key.ToString().IndexOf(' ')),
-                    Count = r.Count()
-                }
-                ).ToList();
+            try
+            {
+                var triggers = await _ctx.Triggers
+                    .Where(x => x.TimeStamp >= DateTime.Today.AddDays(-6))
+                    .ToListAsync();
+                return triggers.ToLookup(x => x.TimeStamp.Date).Select(r =>
+                    new ReportDto
+                    {
+                        Date = r.Key.ToString().Substring(0, r.Key.ToString().IndexOf(' ')),
+                        Count = r.Count()
+                    }
+                    ).ToList();
+            }
+            catch
+            {
+                return null;
+            }
         }
     }
 }
